@@ -1,4 +1,5 @@
-import type { CSSProperties } from 'react';
+import { useEffect, useState } from 'react';
+import { useReducedMotion } from 'framer-motion';
 import {
   ANIMATIONS,
   EXPRESSIONS,
@@ -15,7 +16,7 @@ type PixelCharacterProps = {
   scale?: number;
   /** Pause on the resting frame (also what reduced-motion users get). */
   paused?: boolean;
-  /** Hold one specific frame still (0-based) instead of looping, e.g. a greeting pose. */
+  /** Hold one specific frame still (0-based) instead of looping, e.g. a jump pose. */
   frame?: number;
   /** Spoken to screen readers. */
   label?: string;
@@ -23,12 +24,8 @@ type PixelCharacterProps = {
 };
 
 /**
- * Plays one of Jasmitha's sprite loops.
- *
- * How it works: each animation is ONE wide image ("strip") with all frames side by
- * side. This <div> is exactly one frame wide, and CSS slides the strip left
- * with `steps()`, so the picture jumps from frame to frame instead of gliding.
- * `image-rendering: pixelated` keeps the pixels crisp when scaled.
+ * Plays one of Jasmitha's sprite loops using exact integer-pixel frame stepping
+ * so frames never drift, blur, or fail on CSS `steps(var(...))`.
  */
 export function PixelCharacter({
   animation = 'idle',
@@ -39,25 +36,41 @@ export function PixelCharacter({
   className = '',
 }: PixelCharacterProps) {
   const info = ANIMATIONS[animation];
-  const frameW = info.w * scale;
-  const frameH = info.h * scale;
-  const style: CSSProperties & Record<string, string | number> = {
-    width: frameW,
-    height: frameH,
-    backgroundImage: `url(${STRIP_URL(animation)})`,
-    backgroundSize: `${frameW * info.frames}px ${frameH}px`,
-    // The resting frame is shown whenever the animation is off.
-    backgroundPosition: `${-(frame ?? info.rest) * frameW}px 0`,
-    '--sprite-end': `${-info.frames * frameW}px`,
-    '--sprite-steps': info.frames,
-    '--sprite-duration': `${info.frames / info.fps}s`,
-  };
+  const reduceMotion = useReducedMotion();
+  const [tickFrame, setTickFrame] = useState(0);
+
+  useEffect(() => {
+    setTickFrame(0);
+    if (paused || frame !== undefined || reduceMotion || info.fps <= 0) return;
+    const intervalMs = Math.round(1000 / info.fps);
+    const id = window.setInterval(() => {
+      setTickFrame((curr) => (curr + 1) % info.frames);
+    }, intervalMs);
+    return () => window.clearInterval(id);
+  }, [animation, paused, frame, reduceMotion, info.fps, info.frames]);
+
+  const activeFrame =
+    frame !== undefined
+      ? frame % info.frames
+      : paused || reduceMotion
+        ? info.rest
+        : tickFrame % info.frames;
+
+  const frameW = Math.round(info.w * scale);
+  const frameH = Math.round(info.h * scale);
+
   return (
     <div
       role="img"
       aria-label={label}
-      className={`pixelated sprite-strip ${paused || frame !== undefined ? '' : 'sprite-playing'} ${className}`}
-      style={style}
+      className={`pixelated sprite-strip ${className}`}
+      style={{
+        width: frameW,
+        height: frameH,
+        backgroundImage: `url(${STRIP_URL(animation)})`,
+        backgroundSize: `${frameW * info.frames}px ${frameH}px`,
+        backgroundPosition: `${-activeFrame * frameW}px 0px`,
+      }}
     />
   );
 }
@@ -72,8 +85,8 @@ type PixelFaceProps = {
 /** A single still face close-up, picked by name from the expression strip. */
 export function PixelFace({ expression = 'neutral', scale = 1, label, className = '' }: PixelFaceProps) {
   const index = EXPRESSIONS.indexOf(expression);
-  const frameW = FACE_STRIP.w * scale;
-  const frameH = FACE_STRIP.h * scale;
+  const frameW = Math.round(FACE_STRIP.w * scale);
+  const frameH = Math.round(FACE_STRIP.h * scale);
   return (
     <div
       role="img"
@@ -84,7 +97,7 @@ export function PixelFace({ expression = 'neutral', scale = 1, label, className 
         height: frameH,
         backgroundImage: `url(${STRIP_URL('faces')})`,
         backgroundSize: `${frameW * FACE_STRIP.frames}px ${frameH}px`,
-        backgroundPosition: `${-index * frameW}px 0`,
+        backgroundPosition: `${-index * frameW}px 0px`,
       }}
     />
   );
