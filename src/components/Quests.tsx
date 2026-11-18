@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, BarChart3, Compass, ExternalLink, FileSearch, Flag, Layers3, X } from 'lucide-react';
+import { ArrowUpRight, BarChart3, Compass, ExternalLink, FileSearch, Layers3, X } from 'lucide-react';
 import { siteContent, type Project } from '@/content/site';
 import { SectionHeading, Sticker, Reveal, PixelObject } from '@/components/ui';
 import { PixelSprite } from '@/pixel';

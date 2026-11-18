@@ -2,11 +2,6 @@
 export type Palette = Record<string, string>;
 export type SpriteData = { rows: string[]; palette: Palette };
 
-const COMMON = {
-  ink: '#26221C',
-  cream: '#FAF3E3',
-};
-
 export const CHAR_MAIN: SpriteData = {
   rows: [
     '................',
