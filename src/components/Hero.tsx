@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
-import { ArrowDown, ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowDown, ArrowRight } from 'lucide-react';
 import { siteContent } from '@/content/site';
 import { InteractiveCharacter } from '@/components/CharacterSheet';
-import { Coin, PixelSprite } from '@/pixel';
+import { PixelSprite } from '@/pixel';
 import { HeroArcadeGame } from '@/components/HeroArcadeGame';
-import { CLOUD, STAR, DIAMOND, BULB, HEART } from '@/pixel/sprites';
+import { CLOUD, STAR, DIAMOND, BULB } from '@/pixel/sprites';
 import { useSound } from '@/lib/sound';
 
 export default function Hero() {
@@ -160,41 +160,9 @@ export default function Hero() {
             </p>
           </div>
 
-          {/* Right Column: Vibrant Framed Character Stage + Floating Props */}
+          {/* Right Column: Clean Animated Character with Speech Bubble */}
           <div className="relative z-10 flex items-center justify-center md:justify-end">
-            <div className="relative flex flex-col items-center">
-              {/* Floating animated pixel props orbiting the stage */}
-              <img
-                src="/assets/sprites/props/laptop.png"
-                alt=""
-                aria-hidden="true"
-                className="pixelated pointer-events-none absolute -left-12 top-10 hidden h-14 w-14 -rotate-6 object-contain anim-bob md:block"
-              />
-              <img
-                src="/assets/sprites/props/headphones.png"
-                alt=""
-                aria-hidden="true"
-                className="pixelated pointer-events-none absolute -right-10 top-8 hidden h-12 w-12 rotate-12 object-contain anim-bob md:block"
-                style={{ animationDelay: '-1.4s' }}
-              />
-              <img
-                src="/assets/sprites/props/coffee-books.png"
-                alt=""
-                aria-hidden="true"
-                className="pixelated pointer-events-none absolute -left-14 bottom-16 hidden h-14 w-14 rotate-3 object-contain anim-bob md:block"
-                style={{ animationDelay: '-0.8s' }}
-              />
-              <div className="pointer-events-none absolute -right-8 bottom-24 rotate-[8deg] anim-twinkle">
-                <PixelSprite sprite={HEART} scale={3} />
-              </div>
-              <Coin className="pointer-events-none absolute -right-12 top-1/2 hidden md:block" scale={3} />
-
-              <InteractiveCharacter />
-
-              <div className="mt-4 flex items-center justify-center gap-2 border-2 border-ink-900 bg-bubblegum px-3 py-1 font-hand text-xl text-ink-900 shadow-chunk-sm rotate-[-1.5deg]">
-                <Sparkles size={16} className="text-ink-900" /> that&apos;s me, pixel-sized (click to jump!)
-              </div>
-            </div>
+            <InteractiveCharacter />
           </div>
         </div>
       </div>
