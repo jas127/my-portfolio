@@ -15,6 +15,8 @@ type PixelCharacterProps = {
   scale?: number;
   /** Pause on the resting frame (also what reduced-motion users get). */
   paused?: boolean;
+  /** Hold one specific frame still (0-based) instead of looping, e.g. a greeting pose. */
+  frame?: number;
   /** Spoken to screen readers. */
   label?: string;
   className?: string;
@@ -32,6 +34,7 @@ export function PixelCharacter({
   animation = 'idle',
   scale = 1,
   paused = false,
+  frame,
   label = "Jasmitha's pixel character",
   className = '',
 }: PixelCharacterProps) {
@@ -44,7 +47,7 @@ export function PixelCharacter({
     backgroundImage: `url(${STRIP_URL(animation)})`,
     backgroundSize: `${frameW * info.frames}px ${frameH}px`,
     // The resting frame is shown whenever the animation is off.
-    backgroundPosition: `${-info.rest * frameW}px 0`,
+    backgroundPosition: `${-(frame ?? info.rest) * frameW}px 0`,
     '--sprite-end': `${-info.frames * frameW}px`,
     '--sprite-steps': info.frames,
     '--sprite-duration': `${info.frames / info.fps}s`,
@@ -53,7 +56,7 @@ export function PixelCharacter({
     <div
       role="img"
       aria-label={label}
-      className={`pixelated sprite-strip ${paused ? '' : 'sprite-playing'} ${className}`}
+      className={`pixelated sprite-strip ${paused || frame !== undefined ? '' : 'sprite-playing'} ${className}`}
       style={style}
     />
   );

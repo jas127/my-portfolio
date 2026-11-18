@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useSound } from '@/lib/sound';
+import { readableText } from '@/lib/color';
 import type { ReactNode } from 'react';
 
 /* ---------- Section heading: number tag + display serif + hand note ---------- */
@@ -9,26 +10,29 @@ export function SectionHeading({
   title,
   note,
   color = '#1F5FBF',
+  onDark = false,
 }: {
   index: string;
   title: string;
   note?: string;
   color?: string;
+  /** Use light title text when the section background is dark (violet, red). */
+  onDark?: boolean;
 }) {
   return (
     <div className="mb-10 md:mb-14">
       <div className="flex flex-wrap items-end gap-x-5 gap-y-2">
         <span
           className="font-pixel text-[11px] px-2 py-1 border-2 border-ink-700 shadow-chunk-sm -rotate-2 inline-block"
-          style={{ backgroundColor: color, color: '#FAF3E3' }}
+          style={{ backgroundColor: color, color: readableText(color) }}
         >
           {index}
         </span>
-        <h2 className="font-display font-black text-3xl md:text-5xl text-ink-900 leading-tight">
+        <h2 className={`font-display font-black text-3xl md:text-5xl leading-tight ${onDark ? 'text-warmcream-50' : 'text-ink-900'}`}>
           {title}
         </h2>
         {note && (
-          <span className="font-hand text-xl md:text-2xl text-tomato-500 rotate-[-2deg]">
+          <span className={`font-hand text-xl md:text-2xl rotate-[-2deg] ${onDark ? 'text-acidlime' : 'text-tomato-500'}`}>
             {note}
           </span>
         )}
@@ -54,7 +58,7 @@ export function Sticker({
   return (
     <span
       className={`inline-block font-pixel text-[10px] px-2 py-1 border-2 border-ink-700 shadow-chunk-sm transition-transform duration-200 hover:rotate-0 hover:scale-105 ${className}`}
-      style={{ backgroundColor: color, transform: `rotate(${rotate}deg)`, color: '#FAF3E3' }}
+      style={{ backgroundColor: color, transform: `rotate(${rotate}deg)`, color: readableText(color) }}
     >
       {children}
     </span>

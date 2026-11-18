@@ -3,8 +3,14 @@ import { siteContent } from '@/content/site';
 import { PixelCharacter } from '@/components/PixelCharacter';
 import type { SpriteAnimation } from '@/pixel/spriteManifest';
 
-/** 'interact' is the old name for the laptop pose; it maps to the 'work' loop. */
-type CharacterVariant = 'idle' | 'walk' | 'run' | 'interact' | 'jump' | 'celebrate';
+/**
+ * 'interact' is the old name for the laptop pose; it maps to the 'work' loop.
+ * 'celebrate' plays the full-body jump (the original celebrate row is cropped at the
+ *   thigh, so it is only used for the deliberate 'podium' variant).
+ * 'greet' holds the one-arm-up frame still until a proper waving sprite exists.
+ * 'podium' plays the thigh-cropped celebrate row for small decorative moments.
+ */
+type CharacterVariant = 'idle' | 'walk' | 'run' | 'interact' | 'jump' | 'celebrate' | 'greet' | 'podium';
 
 type CharacterSheetProps = {
   variant?: CharacterVariant;
@@ -19,8 +25,13 @@ const VARIANT_TO_ANIMATION: Record<CharacterVariant, SpriteAnimation> = {
   run: 'run',
   interact: 'work',
   jump: 'jump',
-  celebrate: 'celebrate',
+  celebrate: 'jump',
+  greet: 'work',
+  podium: 'celebrate',
 };
+
+/** Variants that hold a single frame instead of looping. 'work' frame 3 = arm raised. */
+const STATIC_FRAME: Partial<Record<CharacterVariant, number>> = { greet: 3 };
 
 /**
  * Backwards-compatible wrapper: older components call <CharacterSheet variant=... />.
@@ -31,6 +42,7 @@ export function CharacterSheet({ variant = 'idle', scale = 1, message, className
     <PixelCharacter
       animation={VARIANT_TO_ANIMATION[variant]}
       scale={scale}
+      frame={STATIC_FRAME[variant]}
       label={`${siteContent.owner.firstName}'s pixel character${message ? `: ${message}` : ''}`}
       className={className}
     />
@@ -58,14 +70,19 @@ export function InteractiveCharacter({ className = '' }: { className?: string })
         setMessageIndex((current) => (current + 1) % messages.length);
         window.setTimeout(() => setVariant('idle'), 900);
       }}
-      className={`group relative cursor-pointer border-0 bg-transparent p-0 text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-tomato-500 ${className}`}
+      className={`group relative flex flex-col items-center border-0 bg-transparent p-0 focus:outline-none focus-visible:ring-4 focus-visible:ring-tomato-500 ${className}`}
       aria-label="Interact with Jasmitha's pixel character"
     >
-      <span className="absolute -right-12 -top-8 z-20 w-48 border-[3px] border-ink-900 bg-warmcream-50 px-3 py-2 font-hand text-xl leading-none text-ink-900 shadow-chunk-sm transition-transform duration-200 group-hover:-rotate-2 md:-right-20 md:-top-10">
+      {/* The bubble sits ABOVE the character in normal flow, so it can never cover her head
+          or collide with the stickers around her. The fixed min-height stops the layout
+          jumping when the message length changes. */}
+      <span className="relative z-20 mb-5 flex min-h-[5rem] w-60 max-w-[80vw] items-center justify-center border-[3px] border-ink-900 bg-warmcream-50 px-4 py-3 text-center font-hand text-xl leading-tight text-ink-900 shadow-chunk-sm transition-transform duration-200 group-hover:-rotate-1">
         {messages[messageIndex]}
-        <span className="absolute -bottom-3 left-5 h-4 w-4 rotate-45 border-b-[3px] border-r-[3px] border-ink-900 bg-warmcream-50" />
+        <span className="absolute -bottom-[11px] left-1/2 -ml-2 h-4 w-4 rotate-45 border-b-[3px] border-r-[3px] border-ink-900 bg-warmcream-50" />
       </span>
-      <span className="block transition-transform duration-300 group-hover:-translate-y-2">
+      {/* Fixed-height stage: idle, walk and jump frames differ in height, so we pin the
+          tallest and sit the feet at the bottom to stop the page shifting. */}
+      <span className="flex items-end justify-center transition-transform duration-300 group-hover:-translate-y-2" style={{ minHeight: 253 * 1.8 }}>
         <CharacterSheet variant={variant} scale={1.8} />
       </span>
     </button>

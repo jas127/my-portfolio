@@ -56,7 +56,7 @@ export default function Hero() {
             <div className="relative">
               <div className="absolute -left-16 top-2 hidden rotate-[-8deg] md:block"><PixelSprite sprite={TICKET} scale={3} /></div>
               <div className="absolute -left-10 bottom-6 rotate-[10deg]"><PixelSprite sprite={SPLAT} scale={2} /></div>
-              <div className="absolute -right-6 -top-4 rotate-[6deg]"><PixelSprite sprite={HEART} scale={3} /></div>
+              <div className="absolute -right-4 bottom-24 rotate-[6deg]"><PixelSprite sprite={HEART} scale={3} /></div>
               <Coin className="absolute -right-14 top-1/2 hidden md:block" scale={3} />
               <InteractiveCharacter />
               <div className="mt-4 flex items-center justify-center gap-2 font-hand text-2xl text-ink-600 rotate-[-2deg]"><Sparkles size={17} /> that's me, pixel-sized</div>
