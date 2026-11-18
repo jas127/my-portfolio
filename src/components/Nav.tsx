@@ -5,9 +5,12 @@ import { useSound } from '@/lib/sound';
 
 const LINKS = [
   { label: 'Home', href: '#home' },
-  { label: 'Main Quests', href: '#main-quests' },
+  { label: 'Quests', href: '#main-quests' },
   { label: 'Side Quests', href: '#side-quests' },
+  { label: 'Toolbox', href: '#toolbox' },
   { label: 'Field Notes', href: '#field-notes' },
+  { label: 'Curious', href: '#curious' },
+  { label: 'Education', href: '#education' },
   { label: 'About', href: '#about' },
   { label: 'Contact', href: '#contact' },
 ];
