@@ -67,9 +67,13 @@ export default function Hero() {
               transition={{ duration: 0.5 }}
               className="mb-5 inline-flex items-center gap-3"
             >
-              <span className="border-2 border-ink-900 bg-electricviolet px-2 py-0.5 font-pixel text-[9px] tracking-wider text-warmcream-50 shadow-chunk-sm">
+              <a
+                href="#arcade-game"
+                onClick={() => blip(660)}
+                className="border-2 border-ink-900 bg-electricviolet px-3 py-1 font-pixel text-[9px] tracking-wider text-warmcream-50 shadow-chunk-sm transition-transform hover:-translate-y-0.5 hover:bg-tomato-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-tomato-500"
+              >
                 PRESS START
-              </span>
+              </a>
               <span className="h-[3px] w-8 bg-tomato-500" />
               <span className="font-pixel text-[10px] tracking-wider text-ink-600">LEVEL 01 — HOME</span>
             </motion.div>

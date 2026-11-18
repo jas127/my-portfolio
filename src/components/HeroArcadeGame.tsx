@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useReducedMotion } from 'framer-motion';
 import { PixelSprite } from '@/pixel';
 import { PixelCharacter } from '@/components/PixelCharacter';
 import { TREE, BUSH, CLOUD, STAR, FLAG, COIN_A, COIN_B } from '@/pixel/sprites';
@@ -11,10 +10,13 @@ type BlockStation = {
 };
 
 const STATIONS: BlockStation[] = [
-  { id: 0, xPct: 26 },
-  { id: 1, xPct: 50 },
-  { id: 2, xPct: 74 },
+  { id: 0, xPct: 30 },
+  { id: 1, xPct: 54 },
+  { id: 2, xPct: 76 },
 ];
+
+const START_X = 8;
+const END_X = 90;
 
 type Popup = {
   id: number;
@@ -24,36 +26,31 @@ type Popup = {
 
 export function HeroArcadeGame() {
   const { blip, fanfare } = useSound();
-  const reduceMotion = useReducedMotion();
 
-  const [score, setScore] = useState(300);
-  const [coins, setCoins] = useState(3);
-  const [runnerX, setRunnerX] = useState(14); // percentage across track (6..88)
-  const [jumpY, setJumpY] = useState(0); // pixels above ground (0..68)
+  const [score, setScore] = useState(0);
+  const [coins, setCoins] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [runnerX, setRunnerX] = useState(START_X);
+  const [jumpY, setJumpY] = useState(0);
   const [jumpPhase, setJumpPhase] = useState<'ground' | 'rise' | 'peak' | 'fall'>('ground');
   const [hitBlockId, setHitBlockId] = useState<number | null>(null);
   const [coinFrame, setCoinFrame] = useState(false);
   const [popups, setPopups] = useState<Popup[]>([]);
 
-  // Physics refs for smooth 60fps loop
-  const xRef = useRef(14);
-  const jumpProgressRef = useRef<number | null>(null); // 0..1 during jump
-  const autoJumpedBlocksRef = useRef<Set<number>>(new Set());
+  const xRef = useRef(START_X);
+  const isPlayingRef = useRef(false);
+  const jumpProgressRef = useRef<number | null>(null);
   const hitDuringJumpRef = useRef(false);
 
-  const awardCoin = useCallback(
-    (blockId: number | null, atXPct: number, playAudio: boolean) => {
+  const awardBlockHit = useCallback(
+    (blockId: number, atXPct: number) => {
       setScore((s) => s + 100);
       setCoins((c) => c + 1);
-      if (blockId !== null) {
-        setHitBlockId(blockId);
-        window.setTimeout(() => {
-          setHitBlockId((curr) => (curr === blockId ? null : curr));
-        }, 260);
-      }
-      if (playAudio) {
-        fanfare();
-      }
+      setHitBlockId(blockId);
+      window.setTimeout(() => {
+        setHitBlockId((curr) => (curr === blockId ? null : curr));
+      }, 260);
+      fanfare();
       const popupId = Date.now() + Math.random();
       setPopups((prev) => [...prev.slice(-3), { id: popupId, xPct: atXPct, text: '+100' }]);
       window.setTimeout(() => {
@@ -63,70 +60,81 @@ export function HeroArcadeGame() {
     [fanfare]
   );
 
-  // Trigger a player-initiated jump (with sound) or auto-jump (quiet so it never spams sound)
-  const triggerJump = useCallback(
-    (isManual: boolean) => {
-      if (reduceMotion) {
-        // In reduced-motion mode, immediately score a coin on click
-        const nearest = STATIONS.reduce((best, st) =>
-          Math.abs(st.xPct - xRef.current) < Math.abs(best.xPct - xRef.current) ? st : best
-        );
-        awardCoin(nearest.id, nearest.xPct, isManual);
-        return;
-      }
-      if (jumpProgressRef.current !== null) return;
+  // Clicking in the game area:
+  // - If not playing yet, starts the round from START_X
+  // - If already running, makes the character jump!
+  const handleGameAreaClick = useCallback(() => {
+    if (!isPlayingRef.current) {
+      xRef.current = START_X;
+      setRunnerX(START_X);
+      jumpProgressRef.current = null;
+      hitDuringJumpRef.current = false;
+      isPlayingRef.current = true;
+      setIsPlaying(true);
+      blip(660);
+      return;
+    }
+
+    // Already running -> user click triggers jump
+    if (jumpProgressRef.current === null) {
       jumpProgressRef.current = 0;
       hitDuringJumpRef.current = false;
-      if (isManual) {
-        blip(780);
-      }
+      blip(780);
+    }
+  }, [blip]);
+
+  const handleResetScore = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      setScore(0);
+      setCoins(0);
+      isPlayingRef.current = false;
+      setIsPlaying(false);
+      jumpProgressRef.current = null;
+      hitDuringJumpRef.current = false;
+      xRef.current = START_X;
+      setRunnerX(START_X);
+      setJumpY(0);
+      setJumpPhase('ground');
+      blip(440);
     },
-    [awardCoin, blip, reduceMotion]
+    [blip]
   );
 
-  // Coin spin ticker
   useEffect(() => {
     const id = window.setInterval(() => setCoinFrame((f) => !f), 320);
     return () => window.clearInterval(id);
   }, []);
 
-  // 60fps side-scrolling runner & jump arc loop
+  // Game loop runs ONLY when isPlaying is true
   useEffect(() => {
-    if (reduceMotion) return;
+    if (!isPlaying) return;
     let rafId: number;
     let lastTime = performance.now();
-    const RUN_SPEED_PCT_PER_SEC = 13.5; // crosses the level in ~6 seconds
+    const RUN_SPEED_PCT_PER_SEC = 16; // crosses track in ~5s
     const JUMP_DURATION_SEC = 0.56;
 
     const tick = (now: number) => {
       const dt = Math.min(0.05, (now - lastTime) / 1000);
       lastTime = now;
 
-      // Advance horizontal position
-      let nextX = xRef.current + RUN_SPEED_PCT_PER_SEC * dt;
-      if (nextX > 90) {
-        nextX = 6;
-        autoJumpedBlocksRef.current.clear();
+      const nextX = xRef.current + RUN_SPEED_PCT_PER_SEC * dt;
+
+      // End of round: return to starting position and wait for next click while preserving score!
+      if (nextX >= END_X) {
+        isPlayingRef.current = false;
+        jumpProgressRef.current = null;
+        hitDuringJumpRef.current = false;
+        xRef.current = START_X;
+        setIsPlaying(false);
+        setRunnerX(START_X);
+        setJumpY(0);
+        setJumpPhase('ground');
+        return;
       }
+
       xRef.current = nextX;
 
-      // Auto-jump when approaching a mystery block station
-      if (jumpProgressRef.current === null) {
-        for (const st of STATIONS) {
-          if (
-            !autoJumpedBlocksRef.current.has(st.id) &&
-            nextX >= st.xPct - 3.6 &&
-            nextX <= st.xPct - 1.2
-          ) {
-            autoJumpedBlocksRef.current.add(st.id);
-            jumpProgressRef.current = 0;
-            hitDuringJumpRef.current = false;
-            break;
-          }
-        }
-      }
-
-      // Advance jump parabola if jumping
       let nextY = 0;
       let phase: 'ground' | 'rise' | 'peak' | 'fall' = 'ground';
 
@@ -138,19 +146,15 @@ export function HeroArcadeGame() {
           phase = 'ground';
         } else {
           jumpProgressRef.current = p;
-          // Parabolic arc: 4 * p * (1 - p) peaks at 1.0 when p = 0.5
           nextY = Math.round(64 * 4 * p * (1 - p));
           phase = p < 0.32 ? 'rise' : p < 0.68 ? 'peak' : 'fall';
 
-          // Hit check right at the peak (p >= 0.45)
-          if (p >= 0.45 && !hitDuringJumpRef.current) {
-            hitDuringJumpRef.current = true;
-            // Check if near any station block, otherwise score an air coin at current X
-            const nearStation = STATIONS.find((st) => Math.abs(st.xPct - nextX) < 7.5);
-            if (nearStation) {
-              awardCoin(nearStation.id, nearStation.xPct, false);
-            } else {
-              awardCoin(null, nextX, false);
+          // Score ONLY if the character is near the peak of her jump AND horizontally aligned with a '?' block
+          if (p >= 0.34 && p <= 0.66 && !hitDuringJumpRef.current) {
+            const hitStation = STATIONS.find((st) => Math.abs(st.xPct - nextX) <= 4.8);
+            if (hitStation) {
+              hitDuringJumpRef.current = true;
+              awardBlockHit(hitStation.id, hitStation.xPct);
             }
           }
         }
@@ -165,40 +169,17 @@ export function HeroArcadeGame() {
 
     rafId = window.requestAnimationFrame(tick);
     return () => window.cancelAnimationFrame(rafId);
-  }, [awardCoin, reduceMotion]);
+  }, [awardBlockHit, isPlaying]);
 
-  // Keyboard support: Spacebar to jump when hero is in view
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (
-        e.code === 'Space' &&
-        (e.target as HTMLElement)?.tagName !== 'INPUT' &&
-        (e.target as HTMLElement)?.tagName !== 'TEXTAREA' &&
-        (e.target as HTMLElement)?.tagName !== 'BUTTON'
-      ) {
-        const el = document.getElementById('home');
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= window.innerHeight && rect.bottom >= 120) {
-            e.preventDefault();
-            triggerJump(true);
-          }
-        }
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [triggerJump]);
-
-  // Pick the exact jump frame so she never squats in mid-air
   const jumpFrameIndex = jumpPhase === 'rise' ? 1 : jumpPhase === 'peak' ? 2 : 3;
 
   return (
     <div
-      onClick={() => triggerJump(true)}
+      id="arcade-game"
+      onClick={handleGameAreaClick}
       role="region"
-      aria-label="Interactive retro platformer mini-game. Click or press Space to jump and collect coins."
-      className="relative h-[240px] w-full md:h-[270px] overflow-hidden select-none border-t-[3px] border-ink-900 bg-gradient-to-b from-lavender-300/45 via-bubblegum/20 to-warmcream-50 cursor-pointer"
+      aria-label="Interactive retro platformer mini-game. Click inside to start and click to jump and hit blocks."
+      className="relative h-[240px] w-full md:h-[270px] overflow-hidden select-none border-t-[3px] border-ink-900 bg-gradient-to-b from-lavender-300/45 via-bubblegum/20 to-warmcream-50 cursor-pointer scroll-mt-20"
     >
       {/* Subtle pixel grid sky backdrop */}
       <div
@@ -220,16 +201,19 @@ export function HeroArcadeGame() {
           </span>
         </div>
 
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            triggerJump(true);
-          }}
-          className="border-[3px] border-ink-900 bg-acidlime px-3 py-1.5 font-pixel text-[9px] text-ink-900 shadow-chunk-sm transition-transform hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus-visible:ring-4 focus-visible:ring-tomato-500"
-        >
-          [ CLICK OR PRESS SPACE TO JUMP ]
-        </button>
+        <div className="flex items-center gap-2">
+          <span className="border-[3px] border-ink-900 bg-acidlime px-3 py-1.5 font-pixel text-[9px] text-ink-900 shadow-chunk-sm">
+            {isPlaying ? 'CLICK AREA TO JUMP & HIT BLOCKS!' : 'CLICK HERE TO START ROUND'}
+          </span>
+
+          <button
+            type="button"
+            onClick={handleResetScore}
+            className="border-[3px] border-ink-900 bg-tomato-500 px-3 py-1.5 font-pixel text-[9px] text-warmcream-50 shadow-chunk-sm transition-transform hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus-visible:ring-4 focus-visible:ring-ink-900"
+          >
+            RESET SCORE
+          </button>
+        </div>
       </div>
 
       {/* Drifting pixel clouds & twinkling stars */}
@@ -273,13 +257,13 @@ export function HeroArcadeGame() {
       />
 
       {/* Scenery: Pixel Trees, Bushes & Goal Flag */}
-      <div className="pointer-events-none absolute bottom-[44px] left-[3%]">
+      <div className="pointer-events-none absolute bottom-[44px] left-[2%]">
         <PixelSprite sprite={TREE} scale={4} />
       </div>
-      <div className="pointer-events-none absolute bottom-[44px] left-[16%] hidden sm:block">
+      <div className="pointer-events-none absolute bottom-[44px] left-[18%] hidden sm:block">
         <PixelSprite sprite={BUSH} scale={4} />
       </div>
-      <div className="pointer-events-none absolute bottom-[44px] left-[62%] hidden md:block">
+      <div className="pointer-events-none absolute bottom-[44px] left-[64%] hidden md:block">
         <PixelSprite sprite={BUSH} scale={4} />
       </div>
       <div className="pointer-events-none absolute bottom-[44px] right-[4%]">
@@ -297,7 +281,6 @@ export function HeroArcadeGame() {
             className="pointer-events-none absolute bottom-[132px] -translate-x-1/2 flex flex-col items-center"
             style={{ left: `${st.xPct}%` }}
           >
-            {/* Spinning floating gold coin above block */}
             <div
               className={`mb-1.5 transition-transform duration-200 ${
                 isHit ? '-translate-y-7 scale-125' : 'anim-bob'
@@ -306,7 +289,6 @@ export function HeroArcadeGame() {
               <PixelSprite sprite={coinFrame ? COIN_B : COIN_A} scale={3} />
             </div>
 
-            {/* Brick + ? + Brick Platform Trio */}
             <div className="flex items-center">
               <div className="hidden sm:flex h-8 w-8 items-center justify-center border-[3px] border-r-0 border-ink-900 bg-tomato-500 shadow-chunk-sm">
                 <span className="h-1.5 w-4 border-b-2 border-ink-900/40" />
@@ -337,7 +319,7 @@ export function HeroArcadeGame() {
         </div>
       ))}
 
-      {/* Running & Jumping Character on the Track */}
+      {/* Character on the Track: waits at start until clicked, runs during round, jumps only on click */}
       <div
         className="pointer-events-none absolute bottom-[42px] z-20 -translate-x-1/2"
         style={{
@@ -345,12 +327,23 @@ export function HeroArcadeGame() {
           transform: `translate(-50%, ${-jumpY}px)`,
         }}
       >
-        {jumpPhase !== 'ground' ? (
+        {!isPlaying ? (
+          <div className="relative flex flex-col items-center">
+            <span className="mb-1 whitespace-nowrap border-2 border-ink-900 bg-warmcream-50 px-2 py-0.5 font-pixel text-[8px] text-ink-900 shadow-chunk-sm">
+              CLICK TO RUN
+            </span>
+            <PixelCharacter
+              animation="idle"
+              scale={0.44}
+              label="Jasmitha ready at the starting line"
+            />
+          </div>
+        ) : jumpPhase !== 'ground' ? (
           <PixelCharacter
             animation="jump"
             frame={jumpFrameIndex}
             scale={0.52}
-            label="Jasmitha jumping to score a coin"
+            label="Jasmitha jumping to hit a block"
           />
         ) : (
           <PixelCharacter
