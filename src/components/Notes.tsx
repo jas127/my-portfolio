@@ -1,28 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BarChart3, ChevronDown, Eye, Lightbulb, MessageCircle, Sparkles, Users, Wrench } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 import { siteContent } from '@/content/site';
 import { SectionHeading, Reveal, Sticker } from '@/components/ui';
 import { CharacterSheet } from '@/components/CharacterSheet';
 import { useSound } from '@/lib/sound';
-
-const SKILL_ICONS = { chart: BarChart3, compass: Sparkles, eye: Eye, toolbox: Wrench, spark: Lightbulb, people: Users } as const;
-const GROUPS = [
-  { key: 'comfortable', label: 'Comfortable using', color: '#D8EF40' },
-  { key: 'developing', label: 'Currently developing', color: '#F4A8D0' },
-  { key: 'exploring', label: 'Exploring next', color: '#7049C6' },
-] as const;
-
-type SkillGroupKey = (typeof GROUPS)[number]['key'];
-
-export function Toolbox() {
-  const [active, setActive] = useState(siteContent.skills[0].id);
-  const [expanded, setExpanded] = useState<string | null>(siteContent.skills[0].id);
-  const { blip } = useSound();
-  const selected = siteContent.skills.find((skill) => skill.id === active) ?? siteContent.skills[0];
-
-  return <section id="toolbox" className="relative mx-auto max-w-6xl px-4 py-20 md:px-8 md:py-28"><SectionHeading index="03" title="My Toolbox" note="tools, not trophies" color="#7049C6" /><div className="grid gap-7 lg:grid-cols-[0.78fr_1.22fr]"><div className="space-y-3">{siteContent.skills.map((skill, index) => { const SkillIcon = SKILL_ICONS[skill.icon as keyof typeof SKILL_ICONS]; return <Reveal key={skill.id} delay={index * 0.04}><button type="button" onClick={() => { setActive(skill.id); setExpanded(skill.id); blip(440 + index * 60); }} className={`group flex w-full items-center gap-4 border-[3px] border-ink-900 px-4 py-4 text-left shadow-chunk-sm transition-all hover:-translate-y-1 focus:outline-none focus-visible:ring-4 focus-visible:ring-electricviolet ${active === skill.id ? 'bg-ink-900 text-warmcream-50' : 'bg-warmcream-50 text-ink-900'}`}><span className="flex h-10 w-10 shrink-0 items-center justify-center border-2 border-ink-900" style={{ backgroundColor: skill.color }}><SkillIcon size={19} className="text-ink-900" /></span><span className="flex-1 font-display text-lg font-bold">{skill.name}</span><ChevronDown size={18} className={`transition-transform ${expanded === skill.id ? 'rotate-180' : ''}`} /></button></Reveal>; })}</div><Reveal delay={0.1}><div className="border-[3px] border-ink-900 bg-warmcream-50 p-6 shadow-chunk-lg md:p-8"><div className="flex items-start justify-between gap-4"><div><p className="font-pixel text-[9px] text-electricviolet">SELECTED CLUSTER</p><h3 className="mt-2 font-display text-3xl font-black text-ink-900">{selected.name}</h3></div><div className="hidden md:block"><CharacterSheet variant="interact" scale={0.43} /></div></div><div className="mt-7 grid gap-6 md:grid-cols-3">{GROUPS.map((group) => { const items = selected.groups[group.key as SkillGroupKey]; return <div key={group.key}><div className="mb-3 flex items-center gap-2"><span className="h-3 w-3 rotate-45 border-2 border-ink-900" style={{ backgroundColor: group.color }} /><h4 className="font-pixel text-[9px] leading-relaxed text-ink-900">{group.label}</h4></div>{items.length ? <div className="space-y-2">{items.map((item) => <motion.button type="button" key={item} whileHover={{ x: 4 }} onClick={() => blip(500)} className="block w-full border-b-2 border-dashed border-ink-300 pb-2 text-left font-sans text-sm leading-relaxed text-ink-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-electricviolet">{item}</motion.button>)}</div> : <p className="font-hand text-lg text-ink-400">Nothing added here yet.</p>}</div>; })}</div><div className="mt-8 border-t-2 border-dashed border-ink-300 pt-4"><p className="font-hand text-xl text-ink-500">The point is not to look finished. It is to know what I can use, what I am practising and what I want to understand next.</p></div></div></Reveal></div></section>;
-}
 
 export function FieldNotes() {
   return <section id="field-notes" className="relative border-y-[3px] border-ink-900 bg-bubblegum py-20 md:py-28"><div className="mx-auto max-w-6xl px-4 md:px-8"><SectionHeading index="04" title="Field Notes" note="a little publication in progress" color="#7049C6" /><div className="mb-10 flex items-center gap-3"><MessageCircle size={21} className="text-ink-900" /><p className="max-w-2xl font-sans text-[15px] leading-relaxed text-ink-700">These are ideas and draft directions, not published articles. The notebook stays honest until there is something finished enough to share.</p></div><div className="grid gap-5 md:grid-cols-5">{siteContent.notes.map((note, index) => <Reveal key={note.title} delay={index * 0.05}><article className="tape relative h-full border-2 border-ink-900 bg-warmcream-50 p-5 shadow-chunk transition-transform hover:-translate-y-2" style={{ transform: `rotate(${index % 2 === 0 ? -1.2 : 1.1}deg)` }}><div className="flex items-center justify-between gap-2"><Sticker color={note.color} rotate={-2}>{note.tag}</Sticker><span className="font-pixel text-[8px] text-ink-400">{note.status}</span></div><h3 className="mt-5 font-display text-xl font-bold leading-snug text-ink-900">{note.title}</h3><p className="mt-3 font-sans text-sm leading-relaxed text-ink-500">{note.excerpt}</p><div className="mt-5 flex items-center gap-2 font-hand text-lg text-electricviolet">keep this note open <span>→</span></div></article></Reveal>)}</div></div></section>;

@@ -2,7 +2,8 @@ import { SoundProvider } from '@/lib/sound';
 import Nav from '@/components/Nav';
 import Hero from '@/components/Hero';
 import { MainQuests, SideQuests } from '@/components/Quests';
-import { Toolbox, FieldNotes, CurrentlyCurious } from '@/components/Notes';
+import { Toolbox } from '@/components/Toolbox';
+import { FieldNotes, CurrentlyCurious } from '@/components/Notes';
 import { About, OpenDoor } from '@/components/About';
 import Footer from '@/components/Footer';
 

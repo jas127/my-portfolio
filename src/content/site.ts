@@ -1,3 +1,5 @@
+import type { Expression } from '@/pixel/spriteManifest';
+
 export type Project = {
   id: string;
   number: string;
@@ -18,6 +20,22 @@ export type Project = {
   github?: string;
   color: string;
   marker: string;
+};
+
+/** One tool/skill. `story` is only set where a real project or role backs it up. */
+export type Skill = { name: string; story?: { where: string; note: string } };
+
+export type SkillCategory = {
+  id: string;
+  name: string;
+  color: string;
+  /** file name (no extension) in /assets/sprites/props */
+  prop: string;
+  /** face shown beside the character's quip */
+  expression: Expression;
+  quip: string;
+  blurb: string;
+  skills: Skill[];
 };
 
 export const siteContent = {
@@ -255,69 +273,111 @@ export const siteContent = {
       id: 'data-analytics',
       name: 'Data Analytics',
       color: '#FF4C35',
-      icon: 'chart',
-      groups: {
-        comfortable: ['SQL', 'Python', 'Pandas', 'NumPy', 'Exploratory Data Analysis', 'Data Cleaning'],
-        developing: ['Statistical Analysis'],
-        exploring: [],
-      },
+      prop: 'laptop',
+      expression: 'focused',
+      quip: 'Clean data first. Opinions second.',
+      blurb:
+        'Turning raw tables into questions worth asking: cleaning data, exploring it and checking what the numbers can actually support.',
+      skills: [
+        { name: 'SQL' },
+        { name: 'Python' },
+        { name: 'Pandas' },
+        { name: 'NumPy' },
+        { name: 'Exploratory Data Analysis', story: { where: 'Movie Intelligence', note: 'Explored a dataset of roughly 5,000 movie titles before building anything on top of it.' } },
+        { name: 'Data Cleaning', story: { where: 'Movie Intelligence', note: 'Preprocessing and cleaning the movie data was the first step of that project.' } },
+        { name: 'Statistical Analysis' },
+      ],
     },
     {
-      id: 'business-product',
-      name: 'Business & Product Thinking',
+      id: 'business-strategy',
+      name: 'Business & Strategy',
       color: '#7049C6',
-      icon: 'compass',
-      groups: {
-        comfortable: ['Market Research', 'Customer Segmentation', 'SWOT Analysis', 'Business Analysis'],
-        developing: ['Product Thinking', 'KPI Analysis', 'Decision Support'],
-        exploring: ['Strategic Research'],
-      },
+      prop: 'coffee-books',
+      expression: 'thinking',
+      quip: 'Every number has a customer behind it.',
+      blurb:
+        'The business side of the data: understanding markets, customers and trade-offs so an analysis points towards a decision.',
+      skills: [
+        { name: 'Market Research', story: { where: 'Curry in a Hurry', note: 'My part of the international business case competition included the market research.' } },
+        { name: 'Customer Segmentation', story: { where: 'Curry in a Hurry', note: 'Segmenting customers was one of my personal contributions to the case.' } },
+        { name: 'SWOT Analysis', story: { where: 'Curry in a Hurry', note: 'I worked on the SWOT analysis for the competition case.' } },
+        { name: 'Business Analysis' },
+        { name: 'Product Thinking' },
+        { name: 'Strategic Research' },
+        { name: 'KPI Analysis' },
+        { name: 'Decision Support', story: { where: 'CEO in a Box · Revive AI', note: 'Both projects explore how analysis can support a decision rather than replace the person making it.' } },
+      ],
     },
     {
       id: 'visualisation',
       name: 'Data Visualisation',
       color: '#D8EF40',
-      icon: 'eye',
-      groups: {
-        comfortable: ['Tableau', 'Microsoft Excel', 'Dashboard Design'],
-        developing: ['Data Storytelling', 'Data Visualisation'],
-        exploring: [],
-      },
+      prop: 'sparkle',
+      expression: 'starstruck',
+      quip: 'A chart is a sentence with colours.',
+      blurb: 'Making findings easy to read: charts, dashboards and the story that connects them.',
+      skills: [
+        { name: 'Tableau' },
+        { name: 'Microsoft Excel' },
+        { name: 'Dashboard Design' },
+        { name: 'Data Storytelling' },
+        { name: 'Data Visualisation' },
+      ],
     },
     {
       id: 'databases-tools',
       name: 'Databases & Tools',
       color: '#F4A8D0',
-      icon: 'toolbox',
-      groups: {
-        comfortable: ['SQLite', 'MySQL', 'Jupyter Notebook', 'Git', 'GitHub'],
-        developing: [],
-        exploring: [],
-      },
+      prop: 'backpack',
+      expression: 'neutral',
+      quip: 'Everything I need fits in the backpack.',
+      blurb: 'The everyday kit for storing data, running experiments and keeping work versioned.',
+      skills: [
+        { name: 'SQLite' },
+        { name: 'MySQL' },
+        { name: 'Jupyter Notebook' },
+        { name: 'Git' },
+        { name: 'GitHub', story: { where: 'github.com/jas127', note: 'My project work lives in public repositories you can browse.' } },
+      ],
     },
     {
       id: 'ai-ml',
       name: 'AI & Machine Learning',
       color: '#7049C6',
-      icon: 'spark',
-      groups: {
-        comfortable: ['Scikit-learn', 'Computer Vision', 'LLM Applications'],
-        developing: ['Deep Learning', 'EfficientNet', 'Grad-CAM'],
-        exploring: ['AI Workflow Prototyping'],
-      },
+      prop: 'headphones',
+      expression: 'surprised',
+      quip: 'Curious why a model decides, not just what it predicts.',
+      blurb:
+        'Machine learning and AI work from my projects, with a habit of asking how a model reached its answer.',
+      skills: [
+        { name: 'Scikit-learn' },
+        { name: 'Deep Learning' },
+        { name: 'Computer Vision', story: { where: 'Deepfake Detection', note: 'An experimental project on video frame sampling and image classification.' } },
+        { name: 'EfficientNet', story: { where: 'Deepfake Detection', note: 'The project uses EfficientNet-B0 for image classification.' } },
+        { name: 'Grad-CAM', story: { where: 'Deepfake Detection', note: 'Used to look at which parts of a frame influenced the model.' } },
+        { name: 'LLM Applications' },
+        { name: 'AI Workflow Prototyping' },
+      ],
     },
     {
-      id: 'collaboration',
-      name: 'Collaboration & Communication',
+      id: 'communication',
+      name: 'Communication & Collaboration',
       color: '#FF4C35',
-      icon: 'people',
-      groups: {
-        comfortable: ['Research and Information Synthesis', 'Presentation Development', 'Written Communication'],
-        developing: ['Team Coordination', 'Cross-functional Collaboration', 'Event Coordination'],
-        exploring: [],
-      },
+      prop: 'exclamation',
+      expression: 'joy',
+      quip: "An idea isn't finished until someone gets it.",
+      blurb:
+        'Synthesising research, presenting it and coordinating people: the part that gets ideas out of the notebook.',
+      skills: [
+        { name: 'Research and Information Synthesis', story: { where: 'Curry in a Hurry', note: 'Research and information gathering was a core part of my contribution.' } },
+        { name: 'Presentation Development', story: { where: 'Curry in a Hurry', note: 'I helped prepare the presentation (PowerPoint and Canva) and presented the final work myself.' } },
+        { name: 'Team Coordination', story: { where: 'RaSoR, IIT Madras', note: 'As Coordinator I oversee three teams: PR & Outreach, Design & UI/UX, and Event Management.' } },
+        { name: 'Cross-functional Collaboration', story: { where: 'Curry in a Hurry', note: 'Worked with German teammates on an international case competition.' } },
+        { name: 'Event Coordination', story: { where: 'Paradox 2026', note: 'Deputy Event Head, helping turn event plans into execution.' } },
+        { name: 'Written Communication', story: { where: 'RaSoR, IIT Madras', note: 'I review outreach and social media content for the department.' } },
+      ],
     },
-  ],
+  ] as SkillCategory[],
   notes: [
     {
       tag: 'IDEA',
