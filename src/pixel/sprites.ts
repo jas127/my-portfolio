@@ -2,51 +2,6 @@
 export type Palette = Record<string, string>;
 export type SpriteData = { rows: string[]; palette: Palette };
 
-export const CHAR_MAIN: SpriteData = {
-  rows: [
-    '................',
-    '.....HHHHHH.....',
-    '....HHHHHHHH....',
-    '....HFFFFFFH....',
-    '....HFFFFFFH....',
-    '....HFEFFEFH....',
-    '....HFFFFFFH....',
-    '.....FFFFFF.....',
-    '.....FFMMFF.....',
-    '......FFFF......',
-    '....JJJJJJJJ....',
-    '...JJFFFFFFJJ...',
-    '...JJFFFFFFJJ...',
-    '....JJJJJJJJ....',
-    '.....PP..PP.....',
-    '....PPP..PPP....',
-  ],
-  palette: {
-    H: '#4A3421', // hair, walnut brown
-    F: '#F7D8B0', // skin
-    E: '#26221C', // eyes
-    M: '#D93A26', // smile
-    J: '#1F5FBF', // cobalt jacket
-    P: '#332E27', // trousers
-  },
-};
-
-export const CHAR_BLINK: SpriteData = {
-  ...CHAR_MAIN,
-  rows: CHAR_MAIN.rows.map((r, i) =>
-    i === 5 ? '....HFFFFFH....'.slice(0, 12).padEnd(16, '.') : r,
-  ).map((r, i) =>
-    i === 5 ? '....HFFFFFH.....'.slice(0, 16) : r,
-  ),
-};
-
-export const CHAR_WALK: SpriteData = {
-  ...CHAR_MAIN,
-  rows: CHAR_MAIN.rows.map((r, i) =>
-    i === 14 ? '....PP...PP.....' : i === 15 ? '...PPP...PPP....' : r,
-  ),
-};
-
 export const TREE: SpriteData = {
   rows: [
     '....GGGG....',

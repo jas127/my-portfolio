@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        warmcream: '#FFF7E8',
+        warmcream: { DEFAULT: '#FFF7E8', 50: '#FFF7E8' },
         electricviolet: '#7049C6',
         acidlime: '#D8EF40',
         bubblegum: '#F4A8D0',

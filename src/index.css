@@ -116,7 +116,18 @@
 .anim-cursor { animation: cursor-blink 1.1s steps(1) infinite; }
 .anim-drift { animation: drift 30s linear infinite; }
 
+/* Sprite-strip playback (see PixelCharacter.tsx) */
+@keyframes sprite-play {
+  from { background-position-x: 0; }
+  to { background-position-x: var(--sprite-end); }
+}
+.sprite-strip { background-repeat: no-repeat; flex-shrink: 0; }
+.sprite-playing {
+  animation: sprite-play var(--sprite-duration) steps(var(--sprite-steps)) infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .sprite-playing { animation: none; }
   .anim-bob, .anim-blink, .anim-walk, .anim-cloud, .anim-flag,
   .anim-twinkle, .anim-arrow, .anim-cursor, .anim-drift {
     animation: none;

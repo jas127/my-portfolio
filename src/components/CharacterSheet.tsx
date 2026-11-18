@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { siteContent } from '@/content/site';
+import { PixelCharacter } from '@/components/PixelCharacter';
+import type { SpriteAnimation } from '@/pixel/spriteManifest';
 
+/** 'interact' is the old name for the laptop pose; it maps to the 'work' loop. */
 type CharacterVariant = 'idle' | 'walk' | 'run' | 'interact' | 'jump' | 'celebrate';
 
 type CharacterSheetProps = {
@@ -10,38 +13,27 @@ type CharacterSheetProps = {
   className?: string;
 };
 
-const CROPS: Record<CharacterVariant, { x: number; y: number; width: number; height: number }> = {
-  idle: { x: 22, y: 39, width: 108, height: 222 },
-  walk: { x: 634, y: 50, width: 116, height: 218 },
-  run: { x: 18, y: 315, width: 112, height: 202 },
-  interact: { x: 569, y: 315, width: 122, height: 197 },
-  jump: { x: 17, y: 541, width: 116, height: 198 },
-  celebrate: { x: 606, y: 540, width: 126, height: 196 },
+const VARIANT_TO_ANIMATION: Record<CharacterVariant, SpriteAnimation> = {
+  idle: 'idle',
+  walk: 'walk',
+  run: 'run',
+  interact: 'work',
+  jump: 'jump',
+  celebrate: 'celebrate',
 };
 
-export function CharacterSheet({
-  variant = 'idle',
-  scale = 1,
-  message,
-  className = '',
-}: CharacterSheetProps) {
-  const crop = CROPS[variant];
+/**
+ * Backwards-compatible wrapper: older components call <CharacterSheet variant=... />.
+ * It now plays the animated, transparent sprite strips instead of cropping the sheet.
+ */
+export function CharacterSheet({ variant = 'idle', scale = 1, message, className = '' }: CharacterSheetProps) {
   return (
-    <div className={`relative inline-block ${className}`} style={{ width: crop.width * scale, height: crop.height * scale }}>
-      <div
-        role="img"
-        aria-label={`${siteContent.owner.firstName}'s pixel character${message ? `: ${message}` : ''}`}
-        className="absolute left-0 top-0 origin-top-left bg-no-repeat"
-        style={{
-          width: crop.width,
-          height: crop.height,
-          transform: `scale(${scale})`,
-          backgroundImage: 'url(/assets/images/image.png)',
-          backgroundSize: '1254px 1254px',
-          backgroundPosition: `-${crop.x}px -${crop.y}px`,
-        }}
-      />
-    </div>
+    <PixelCharacter
+      animation={VARIANT_TO_ANIMATION[variant]}
+      scale={scale}
+      label={`${siteContent.owner.firstName}'s pixel character${message ? `: ${message}` : ''}`}
+      className={className}
+    />
   );
 }
 

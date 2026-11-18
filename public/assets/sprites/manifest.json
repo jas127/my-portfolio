@@ -1,0 +1,50 @@
+{
+  "idle": {
+    "frames": 6,
+    "w": 105,
+    "h": 253
+  },
+  "walk": {
+    "frames": 4,
+    "w": 132,
+    "h": 235
+  },
+  "run": {
+    "frames": 4,
+    "w": 125,
+    "h": 191
+  },
+  "work": {
+    "frames": 4,
+    "w": 154,
+    "h": 195
+  },
+  "jump": {
+    "frames": 5,
+    "w": 116,
+    "h": 212
+  },
+  "celebrate": {
+    "frames": 4,
+    "w": 148,
+    "h": 205
+  },
+  "faces": {
+    "frames": 11,
+    "w": 124,
+    "h": 138
+  },
+  "props": [
+    "character-back",
+    "character-side",
+    "backpack",
+    "laptop",
+    "coffee-books",
+    "headphones",
+    "plant",
+    "cat",
+    "sparkle",
+    "heart",
+    "exclamation"
+  ]
+}

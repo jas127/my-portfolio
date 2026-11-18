@@ -1,7 +1,5 @@
 import PixelSprite from './PixelSprite';
 import {
-  CHAR_MAIN,
-  CHAR_WALK,
   TREE,
   BUSH,
   CLOUD,
@@ -19,40 +17,6 @@ import {
   type SpriteData,
 } from './sprites';
 import { useEffect, useState } from 'react';
-
-/** Character that blinks and occasionally switches to a walking pose. */
-export function Character({ scale = 5, className = '' }: { scale?: number; className?: string }) {
-  const [pose, setPose] = useState<'idle' | 'walk' | 'blink'>('idle');
-  useEffect(() => {
-    let alive = true;
-    let timer: number;
-    const loop = () => {
-      if (!alive) return;
-      const r = Math.random();
-      if (r < 0.2) {
-        setPose('blink');
-        window.setTimeout(() => alive && setPose('idle'), 160);
-      } else if (r < 0.45) {
-        setPose('walk');
-        window.setTimeout(() => alive && setPose('idle'), 900);
-      }
-      timer = window.setTimeout(loop, 1400 + Math.random() * 2200);
-    };
-    timer = window.setTimeout(loop, 1600);
-    return () => {
-      alive = false;
-      window.clearTimeout(timer);
-    };
-  }, []);
-  const sprite = pose === 'walk' ? CHAR_WALK : CHAR_MAIN;
-  return (
-    <div className={className}>
-      <div className={pose === 'walk' ? 'anim-walk' : 'anim-bob'}>
-        <PixelSprite sprite={sprite} scale={scale} />
-      </div>
-    </div>
-  );
-}
 
 /** Animated coin pair. */
 export function Coin({ scale = 3, className = '' }: { scale?: number; className?: string }) {
@@ -131,5 +95,5 @@ export function PixelScene({ className = '' }: { className?: string }) {
   );
 }
 
-export { CHAR_MAIN, TREE, BUSH, CLOUD, FLAG, SIGN, CAT, STAR, BULB, HEART, SPLAT, TICKET, DIAMOND };
+export { TREE, BUSH, CLOUD, FLAG, SIGN, CAT, STAR, BULB, HEART, SPLAT, TICKET, DIAMOND };
 export type { SpriteData };
