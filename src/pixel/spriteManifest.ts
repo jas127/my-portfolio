@@ -17,9 +17,9 @@ export const ANIMATIONS: Record<SpriteAnimation, StripInfo> = {
   walk: { frames: 4, w: 132, h: 235, fps: 6, rest: 0 },
   run: { frames: 4, w: 125, h: 191, fps: 8, rest: 0 },
   work: { frames: 4, w: 154, h: 195, fps: 2.5, rest: 0 },
-  jump: { frames: 5, w: 116, h: 212, fps: 6, rest: 0 },
+  jump: { frames: 5, w: 116, h: 212, fps: 6, rest: 2 },
   celebrate: { frames: 4, w: 148, h: 205, fps: 2.5, rest: 0 },
-  wave: { frames: 7, w: 136, h: 273, fps: 5, rest: 0 },
+  wave: { frames: 10, w: 136, h: 264, fps: 4.5, rest: 5 },
 };
 
 /** The 11 face close-ups, in the order they appear on the sheet. */
