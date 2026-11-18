@@ -53,13 +53,13 @@ export const siteContent = {
   },
   hero: {
     support:
-      "I'm a Computer Science student pursuing a second degree in Data Science, interested in the space where technology, data and business meet. Outside my coursework, I explore research communities, case competitions and hands-on projects, combining curiosity with analytical rigor.",
+      "I'm a Computer Science student pursuing a second degree in Data Science. I've never been one to stick to just one area of interest. I enjoy exploring unfamiliar ideas, picking up new skills and finding my way through challenges. Whether it's research, a case competition or a hands-on project, I'm usually up for figuring something new out.",
     messages: [
-      "Oh, what's this?",
-      'Currently figuring this out.',
-      'New side quest unlocked!',
-      "Let's explore.",
-      'Open to interesting opportunities.',
+      "Hi, welcome! ✨",
+      "Looking for opportunities 💌",
+      "Let's explore!",
+      "Curious about something new?",
+      "Glad you're here! 👋",
     ],
   },
   projects: [

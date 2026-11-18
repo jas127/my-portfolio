@@ -1,14 +1,14 @@
 /**
  * Describes every sprite strip in /public/assets/sprites/strips.
- * The strips were cut from the master sheet (public/assets/images/image.png)
- * by a script, so frame counts and sizes below are real measurements, not guesses.
+ * The strips were cut from the master sheet and action sheets by scripts,
+ * so frame counts and sizes below are real measurements, not guesses.
  *
  * w / h   – size of ONE frame in the strip, in source pixels
  * frames  – how many frames sit side by side in the strip
  * fps     – playback speed for the loop
  * rest    – which frame to show when motion is switched off (reduced-motion)
  */
-export type SpriteAnimation = 'idle' | 'walk' | 'run' | 'work' | 'jump' | 'celebrate';
+export type SpriteAnimation = 'idle' | 'walk' | 'run' | 'work' | 'jump' | 'celebrate' | 'wave';
 
 export type StripInfo = { frames: number; w: number; h: number; fps: number; rest: number };
 
@@ -19,6 +19,7 @@ export const ANIMATIONS: Record<SpriteAnimation, StripInfo> = {
   work: { frames: 4, w: 154, h: 195, fps: 2.5, rest: 0 },
   jump: { frames: 5, w: 116, h: 212, fps: 6, rest: 0 },
   celebrate: { frames: 4, w: 148, h: 205, fps: 2.5, rest: 0 },
+  wave: { frames: 5, w: 122, h: 245, fps: 4, rest: 2 },
 };
 
 /** The 11 face close-ups, in the order they appear on the sheet. */
