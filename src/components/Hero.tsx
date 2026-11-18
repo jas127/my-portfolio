@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
 import { ArrowDown, ArrowRight, Sparkles } from 'lucide-react';
 import { siteContent } from '@/content/site';
-import { CharacterSheet, InteractiveCharacter } from '@/components/CharacterSheet';
-import { PixelScene, Coin, PixelSprite } from '@/pixel';
+import { InteractiveCharacter } from '@/components/CharacterSheet';
+import { Coin, PixelSprite } from '@/pixel';
+import { HeroArcadeGame } from '@/components/HeroArcadeGame';
 import { SPLAT, TICKET, HEART } from '@/pixel/sprites';
 import { useSound } from '@/lib/sound';
 
@@ -136,13 +137,7 @@ export default function Hero() {
         transition={{ duration: 0.8, delay: 0.4 }}
         className="relative mt-12 md:mt-4"
       >
-        <PixelScene className="h-[200px] w-full md:h-[260px]" />
-        <div className="pointer-events-none absolute bottom-12 right-[18%] hidden items-end gap-2 md:flex">
-          <CharacterSheet variant="jump" scale={0.5} />
-          <span className="border-2 border-ink-900 bg-warmcream-50 px-2.5 py-1 font-hand text-lg text-ink-900 shadow-chunk-sm">
-            Let&apos;s explore.
-          </span>
-        </div>
+        <HeroArcadeGame />
       </motion.div>
 
       <div className="relative flex flex-col items-center justify-center border-t-[3px] border-ink-900 bg-nearblack py-4">

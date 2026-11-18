@@ -55,11 +55,7 @@ export const siteContent = {
     support:
       "I'm a Computer Science student pursuing a second degree in Data Science. I've never been one to stick to just one area of interest. I enjoy exploring unfamiliar ideas, picking up new skills and finding my way through challenges. Whether it's research, a case competition or a hands-on project, I'm usually up for figuring something new out.",
     messages: [
-      "Hi, welcome! ✨",
-      "Looking for opportunities 💌",
-      "Let's explore!",
-      "Curious about something new?",
-      "Glad you're here! 👋",
+      "Hi!",
     ],
   },
   projects: [
