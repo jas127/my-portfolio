@@ -1,6 +1,6 @@
 # 🎮 Curiosity Arcade — Personal Portfolio
 
-> **"Curious by default. Analytical by choice."**  
+> **"An ongoing work in curiosity."**  
 > Personal portfolio website of **Jasmitha Kancharlapalli**, exploring the intersection of data analytics, business strategy, AI/ML research, and product thinking.
 
 ---

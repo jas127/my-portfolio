@@ -66,7 +66,7 @@ export default function Hero() {
               transition={{ duration: 0.55, delay: 0.18 }}
               className="mt-5 font-display text-2xl font-semibold italic leading-snug text-electricviolet md:text-4xl"
             >
-              Curious by default.<br />Analytical by choice.
+              An ongoing work in curiosity.
             </motion.p>
 
             <motion.p

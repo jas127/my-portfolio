@@ -21,7 +21,7 @@ export default function Footer() {
               </span>
               <div>
                 <h3 className="font-display text-2xl font-black">{siteContent.owner.fullName}</h3>
-                <p className="font-hand text-xl text-acidlime">&ldquo;Curious by default. Analytical by choice.&rdquo;</p>
+                <p className="font-hand text-xl text-acidlime">&ldquo;An ongoing work in curiosity.&rdquo;</p>
               </div>
             </div>
 

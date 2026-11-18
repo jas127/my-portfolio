@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FileEdit, Sparkles, BookOpen } from 'lucide-react';
+import { FileEdit, Sparkles } from 'lucide-react';
 import { siteContent } from '@/content/site';
 import { SectionHeading, Reveal, Sticker } from '@/components/ui';
 import { CharacterSheet } from '@/components/CharacterSheet';
@@ -19,7 +19,7 @@ export function FieldNotes() {
           </p>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {siteContent.notes.map((note, index) => (
             <Reveal key={note.title} delay={index * 0.05}>
               <article
@@ -140,22 +140,6 @@ export function CurrentlyCurious() {
         </Reveal>
       </div>
 
-      <Reveal delay={0.15}>
-        <div className="mt-12 flex flex-col gap-4 border-[3px] border-ink-900 bg-warmcream-50 p-6 shadow-chunk md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-3">
-            <BookOpen size={24} className="text-electricviolet shrink-0" />
-            <div>
-              <p className="font-pixel text-[9px] text-electricviolet tracking-wider">THINGS I&apos;M LEARNING RIGHT NOW</p>
-              <p className="mt-1 font-sans text-sm font-semibold text-ink-800">
-                Bayesian optimization methods, Explainable AI interpretability (Grad-CAM), and revenue recovery decision boundaries.
-              </p>
-            </div>
-          </div>
-          <span className="border-2 border-ink-900 bg-bubblegum px-3 py-1.5 font-pixel text-[9px] text-ink-900 shadow-chunk-sm self-start md:self-auto shrink-0">
-            ACTIVE EXPLORATION
-          </span>
-        </div>
-      </Reveal>
     </section>
   );
 }

@@ -405,13 +405,7 @@ export const siteContent = {
     },
   ] as SkillCategory[],
   notes: [
-    {
-      tag: 'MUSIC & LIFE',
-      title: 'How music becomes part of everyday lives',
-      excerpt: 'Exploring how alternative rock (Radiohead, Muse) and daily rhythms quietly shape our memory, focus and the emotional texture of ordinary days.',
-      status: 'Draft in progress',
-      color: '#FF4C35',
-    },
+
     {
       tag: 'ANALYTICS',
       title: 'Learning to understand data beyond dashboards',
@@ -484,12 +478,7 @@ export const siteContent = {
         'Cross-pollinating analytical tools across disciplines—like bringing Bayesian optimisation to bio-filters or behavioral psychology to revenue recovery.',
       color: '#D8EF40',
     },
-    {
-      title: 'Music & Everyday Life',
-      detail:
-        'Studying how music—especially alternative rock like Radiohead and Muse—creates ambient architecture for concentration, reflection, and daily life.',
-      color: '#F4A8D0',
-    },
+
   ],
   education: {
     storyHeading: "Two degrees. One thing I've figured out about myself.",
@@ -519,12 +508,11 @@ export const siteContent = {
   },
   about: [
     "Hi, I'm Jasmitha.",
-    "I'm a Computer Science student pursuing a second degree in Data Science, interested in the space where technology, data and business meet.",
-    "I'm drawn to questions that don't have obvious answers. I enjoy understanding why something happens, exploring different perspectives, finding patterns in information and turning ideas into something useful.",
-    "My interests move between analytics, AI, product thinking, business strategy and research.",
-    "Outside my coursework, I've explored research communities, leadership, collaborative case competitions and hackathons.",
-    "I enjoy working with people, taking responsibility and learning by doing.",
-    "I'm still figuring out where I want to specialise, and I find that exciting. I want to keep exploring, building and discovering the kind of problems I can contribute to.",
+    "I'm a Computer Science student pursuing a second degree in Data Science. I'm someone who enjoys figuring things out, learning unfamiliar things and finding my way around new challenges.",
+    "I've never been particularly attached to staying within one subject or one way of thinking. My interests move between technology, data, analytics, AI, product thinking and business strategy. What draws me in is the opportunity to understand something new, connect ideas and turn what I've learned into something useful.",
+    "I tend to learn by getting involved. Give me something unfamiliar, a problem to work through or a responsibility to take on, and I'll find my way around it. I enjoy asking questions, exploring different approaches, learning from people around me and taking ownership of the work I'm doing.",
+    "Outside academics, I've explored research communities, leadership, international case competitions and hackathons. Each has introduced me to different people, ways of working and problems to figure out.",
+    "I haven't decided on one narrow path yet, and I see that as room to grow. I'm looking for opportunities that challenge me, expose me to new things and let me contribute while learning along the way.",
   ],
   opportunityTypes: [
     'Data Analyst Internships',

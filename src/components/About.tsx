@@ -45,10 +45,10 @@ export function About() {
               <div className="mt-8 border-[3px] border-ink-900 bg-warmcream-50 p-6 shadow-chunk">
                 <p className="font-pixel text-[9px] text-electricviolet">CORE PHILOSOPHY</p>
                 <blockquote className="mt-2 font-display text-xl font-bold italic text-ink-900 md:text-2xl">
-                  &ldquo;Curious by default. Analytical by choice.&rdquo;
+                  &ldquo;An ongoing work in curiosity.&rdquo;
                 </blockquote>
                 <p className="mt-2 font-hand text-xl text-ink-500">
-                  Combining exploratory instincts with structured analytical problem solving.
+                  Always exploring, building, and learning along the way.
                 </p>
               </div>
             </Reveal>
