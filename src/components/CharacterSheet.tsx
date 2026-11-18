@@ -121,7 +121,7 @@ export function InteractiveCharacter({ className = '' }: { className?: string })
         >
           <PixelCharacter
             animation={action}
-            scale={0.92}
+            scale={action === 'wave' ? 0.81 : 0.92}
             label={`Jasmitha pixel character (${action})`}
             className="transition-transform duration-200 group-hover:-translate-y-1"
           />

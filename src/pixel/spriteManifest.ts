@@ -19,7 +19,7 @@ export const ANIMATIONS: Record<SpriteAnimation, StripInfo> = {
   work: { frames: 4, w: 154, h: 195, fps: 2.5, rest: 0 },
   jump: { frames: 5, w: 116, h: 212, fps: 6, rest: 2 },
   celebrate: { frames: 4, w: 148, h: 205, fps: 2.5, rest: 0 },
-  wave: { frames: 8, w: 136, h: 266, fps: 4, rest: 4 },
+  wave: { frames: 6, w: 154, h: 290, fps: 4, rest: 2 },
 };
 
 /** The 11 face close-ups, in the order they appear on the sheet. */
@@ -42,4 +42,4 @@ export type Expression = (typeof EXPRESSIONS)[number];
 export const FACE_STRIP: StripInfo = { frames: 11, w: 124, h: 138, fps: 0, rest: 0 };
 
 export const STRIP_URL = (name: SpriteAnimation | 'faces') =>
-  name === 'wave' ? '/assets/sprites/strips/wave-loop.png?v=8' : `/assets/sprites/strips/${name}.png?v=8`;
+  name === 'wave' ? '/assets/sprites/strips/wave-v9.png?v=9' : `/assets/sprites/strips/${name}.png?v=9`;
