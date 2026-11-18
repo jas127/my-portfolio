@@ -125,12 +125,12 @@ export function FieldNotes() {
   return (
     <section id="field-notes" className="relative border-y-[3px] border-ink-900 bg-bubblegum py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-4 md:px-8">
-        <SectionHeading index="04" title="Field Notes" note="a publication in progress" color="#7049C6" />
+        <SectionHeading index="04" title="Field Notes" note="writing in progress" color="#7049C6" />
 
         <div className="mb-10 flex items-center gap-3">
           <FileEdit size={22} className="text-ink-900 shrink-0" />
           <p className="max-w-2xl font-sans text-[15px] leading-relaxed text-ink-800">
-            These are working drafts and article concepts in progress, not published articles. The notebook documents ideas exploring data, strategic thinking, decision-making and hands-on experimentation.
+            These are personal notes and working drafts in progress. The notebook is a place to think out loud about data, strategic thinking, decision-making and hands-on experimentation.
           </p>
         </div>
 
