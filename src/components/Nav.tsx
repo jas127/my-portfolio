@@ -20,7 +20,20 @@ export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [soundHover, setSoundHover] = useState(false);
+  const [justUnmuted, setJustUnmuted] = useState(false);
   const { on, toggle, blip } = useSound();
+
+  const handleSoundToggle = () => {
+    const willUnmute = !on;
+    toggle();
+    if (willUnmute) {
+      setJustUnmuted(true);
+      window.setTimeout(() => setJustUnmuted(false), 2600);
+    } else {
+      setJustUnmuted(false);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -117,21 +130,47 @@ export default function Nav() {
               <span className="font-pixel text-[8px] tracking-wider text-ink-900">OPEN TO OPPORTUNITIES</span>
             </a>
 
-            {/* Sound & background music toggle */}
-            <button
-              onClick={toggle}
-              title={on ? 'Mute background song & audio' : 'Unmute background song & audio'}
-              aria-label={on ? 'Mute background song & audio' : 'Unmute background song & audio'}
-              className={`flex h-10 w-10 items-center justify-center border-[3px] border-ink-900 shadow-chunk-sm transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-tomato-500 ${
-                on ? 'bg-acidlime' : 'bg-warmcream-50'
-              }`}
+            {/* Sound & background music toggle with gamified arcade tooltip */}
+            <div
+              className="relative"
+              onMouseEnter={() => setSoundHover(true)}
+              onMouseLeave={() => {
+                setSoundHover(false);
+                setJustUnmuted(false);
+              }}
             >
-              {on ? (
-                <Volume2 size={18} className="text-ink-900" strokeWidth={2.5} />
-              ) : (
-                <VolumeX size={18} className="text-ink-500" strokeWidth={2.5} />
-              )}
-            </button>
+              <button
+                onClick={handleSoundToggle}
+                aria-label={on ? "Don't mute, it's a great song" : 'Good job! enjoy the song'}
+                className={`flex h-10 w-10 items-center justify-center border-[3px] border-ink-900 shadow-chunk-sm transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-tomato-500 ${
+                  on ? 'bg-acidlime' : 'bg-warmcream-50'
+                }`}
+              >
+                {on ? (
+                  <Volume2 size={18} className="text-ink-900" strokeWidth={2.5} />
+                ) : (
+                  <VolumeX size={18} className="text-ink-500" strokeWidth={2.5} />
+                )}
+              </button>
+
+              <AnimatePresence>
+                {(soundHover || justUnmuted) && (
+                  <motion.span
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 4 }}
+                    transition={{ duration: 0.15 }}
+                    className={`pointer-events-none absolute right-0 top-12 z-50 whitespace-nowrap border-[3px] border-ink-900 px-3 py-1.5 font-pixel text-[8px] tracking-wider text-ink-900 shadow-chunk-sm ${
+                      justUnmuted || !on ? 'bg-acidlime' : 'bg-bubblegum'
+                    }`}
+                  >
+                    {justUnmuted || !on
+                      ? 'Good job! enjoy the song'
+                      : "Don't mute, it's a great song"}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* Mobile menu button */}
             <button

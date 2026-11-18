@@ -42,8 +42,8 @@ export function CharacterSheet({ variant = 'idle', scale = 1, frame, message, cl
 }
 
 const HERO_STATES: Array<{ animation: SpriteAnimation; message: string; scale: number }> = [
-  { animation: 'wave', message: 'Hi! Welcome', scale: 0.95 },
-  { animation: 'work', message: 'Open to work', scale: 1.15 },
+  { animation: 'wave', message: 'Hi! Welcome', scale: 1.18 },
+  { animation: 'work', message: 'Open to work', scale: 1.42 },
 ];
 
 export function InteractiveCharacter({ className = '' }: { className?: string }) {
@@ -67,7 +67,7 @@ export function InteractiveCharacter({ className = '' }: { className?: string })
       </span>
 
       {/* Fixed-height stage so switching between wave and sitting laptop pose never shifts layout */}
-      <div className="flex items-end justify-center" style={{ height: 280 }}>
+      <div className="flex items-end justify-center" style={{ height: 345 }}>
         <PixelCharacter
           animation={current.animation}
           scale={current.scale}
