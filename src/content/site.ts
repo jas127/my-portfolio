@@ -38,6 +38,18 @@ export type SkillCategory = {
   skills: Skill[];
 };
 
+export type FieldNote = {
+  id: string;
+  number: string;
+  tag: string;
+  category: string;
+  title: string;
+  excerpt: string;
+  status: string;
+  color: string;
+  paragraphs: string[];
+};
+
 export const siteContent = {
   owner: {
     firstName: 'Jasmitha',
@@ -401,36 +413,82 @@ export const siteContent = {
     },
   ] as SkillCategory[],
   notes: [
-
     {
+      id: 'questions-behind-the-numbers',
+      number: '01',
       tag: 'ANALYTICS',
-      title: 'Learning to understand data beyond dashboards',
-      excerpt: 'A reflection on what happens behind polished BI charts—the data collection trade-offs, messy edge cases, and human assumptions hiding in rows.',
+      category: 'Analytics',
+      title: 'The questions behind the numbers',
+      excerpt:
+        'Why good analysis begins with questioning what appears obvious—examining where data comes from, what might be missing, and what the numbers can and cannot tell us.',
       status: 'Draft in progress',
       color: '#7049C6',
+      paragraphs: [
+        "Data is often presented as an answer. A chart goes up, a metric goes down, a dashboard highlights a pattern, and it can feel as though we've understood what is happening.",
+        "But I've been increasingly interested in what comes before and after that point.",
+        "Where did the data come from? What might be missing? Which assumptions shaped the way it was collected or interpreted? And does the pattern actually explain what we're trying to understand?",
+        "I think there's a difference between finding something interesting in a dataset and knowing what to make of it. The latter requires context, questioning and sometimes being comfortable with the fact that the data doesn't give us a neat answer.",
+        "That's one of the things I enjoy about analytics. It isn't simply about producing numbers or visualisations. It's about asking better questions, examining what the information can and cannot tell us, and being careful about the conclusions we draw.",
+        'The more I learn, the more I realise that good analysis often begins with questioning what appears obvious.',
+      ],
     },
     {
+      id: 'international-business-case-competition',
+      number: '02',
       tag: 'STRATEGY',
+      category: 'Strategy',
       title: 'What an international business case competition taught me',
-      excerpt: 'Observations from Curry in a Hurry: collaborating across cultures with German teammates, structuring ambiguous problems, and defending ideas live.',
+      excerpt:
+        'Observations from Curry in a Hurry: collaborating with German teammates, connecting market research with customer segmentation, and presenting a clear recommendation.',
       status: 'Draft in progress',
       color: '#D8EF40',
+      paragraphs: [
+        'Working on Curry in a Hurry with German teammates gave me an opportunity to approach a business problem from different perspectives.',
+        'Our work involved market research, customer segmentation, SWOT analysis and putting together a presentation. We collaborated across most of these activities, while I took particular responsibility for gathering information, structuring parts of the research, developing the presentation and presenting our final work.',
+        'One thing I found interesting was how a problem could look different depending on which part of it you chose to examine. Research could point towards one opportunity, customer segmentation could reveal another perspective, and the challenge was bringing those pieces together into a coherent recommendation.',
+        'It also reminded me that communicating an idea is a different skill from simply understanding it. You need to organise your thinking, make your reasoning clear and be prepared to explain why your conclusions make sense.',
+        'I came away appreciating the process of working through an ambiguous problem with people who bring different perspectives to the table.',
+      ],
     },
     {
+      id: 'where-technology-business-and-human-decisions-meet',
+      number: '03',
       tag: 'DECISION SYSTEMS',
+      category: 'Decision Systems',
       title: 'Where technology, business and human decisions meet',
-      excerpt: 'An inquiry into how analytical models interact with executive judgment, and why decision support is fundamentally different from automated decision making.',
+      excerpt:
+        'An exploration of how analytical models and decision-support systems interact with context, priorities, constraints, and human judgement.',
       status: 'Draft in progress',
       color: '#F4A8D0',
+      paragraphs: [
+        "I've always found the space between technology and business interesting. A technical solution might work exactly as intended, but that doesn't automatically mean it solves the right problem.",
+        'Consider a decision-support system. It can organise information, identify patterns, compare possibilities and offer recommendations. But the decision itself often depends on things that are harder to quantify: context, priorities, constraints and human judgement.',
+        'This is where I think the relationship between data and decision-making becomes interesting.',
+        'Models can help us see things we might otherwise overlook. They can make complicated information easier to examine. But treating their output as an unquestionable answer can be just as limiting as making a decision without looking at the evidence.',
+        "I'm interested in understanding how these systems can support people rather than simply replace their judgement.",
+        "For me, the interesting question isn't only what technology can automate. It's also where human understanding still matters, and how the two can work together.",
+      ],
     },
     {
+      id: 'learning-by-building-unfamiliar-things',
+      number: '04',
       tag: 'EXPERIMENTATION',
+      category: 'Experimentation',
       title: 'Learning by building unfamiliar things',
-      excerpt: 'A defense of rapid prototyping and curiosity-led builds: why stepping into unfamiliar tools teaches you faster than passive reading.',
+      excerpt:
+        'Why getting hands-on with unfamiliar tools and problems raises better questions than studying them from a distance.',
       status: 'Draft in progress',
       color: '#FF4C35',
+      paragraphs: [
+        "There's a particular kind of learning that happens when you stop reading about something and actually try to build with it.",
+        "You encounter unfamiliar tools, run into problems you didn't anticipate, make mistakes and gradually start understanding how the pieces fit together.",
+        "I've found that getting hands-on with something often raises better questions than simply studying it from a distance. You begin to notice what you don't understand, which assumptions were wrong and what you need to figure out next.",
+        "I also think there's value in being willing to start before you feel completely ready. Not in the sense of skipping the fundamentals, but in accepting that understanding develops through practice as much as preparation.",
+        "Building something unfamiliar can be uncomfortable because there isn't always a clear path to follow. But that uncertainty is also what makes the process interesting.",
+        "I don't think learning has to happen in a perfectly organised sequence. Sometimes the best way to understand something is to get involved, experiment, ask questions and keep working through it.",
+      ],
     },
-  ],
+  ] as FieldNote[],
   curiosities: [
     {
       title: 'AI & Data-Driven Decisions',

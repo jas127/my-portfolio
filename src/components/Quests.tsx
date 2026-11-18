@@ -146,11 +146,25 @@ function ProjectCard({
 }) {
   const { blip } = useSound();
 
+  const openCaseStudy = () => {
+    onOpen(project);
+    blip(620);
+  };
+
   return (
     <Reveal delay={index * 0.06} className="h-full">
       <motion.div
+        role="button"
+        tabIndex={0}
+        onClick={openCaseStudy}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openCaseStudy();
+          }
+        }}
         whileHover={{ y: -6, rotate: index % 2 === 0 ? -0.7 : 0.7 }}
-        className="group relative flex h-full w-full flex-col overflow-hidden border-[3px] border-ink-900 bg-warmcream-50 text-left shadow-chunk transition-shadow hover:shadow-chunk-lg"
+        className="group relative flex h-full w-full flex-col overflow-hidden border-[3px] border-ink-900 bg-warmcream-50 text-left shadow-chunk transition-shadow hover:shadow-chunk-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-electricviolet cursor-pointer"
       >
         <div
           className="flex items-center justify-between border-b-[3px] border-ink-900 px-5 py-3"
@@ -164,7 +178,9 @@ function ProjectCard({
 
         <div className="flex flex-1 flex-col px-5 py-6">
           <p className="font-pixel text-[9px] tracking-wide text-electricviolet">{project.category}</p>
-          <h3 className="mt-3 font-display text-2xl font-black leading-snug text-ink-900">{project.title}</h3>
+          <h3 className="mt-3 font-display text-2xl font-black leading-snug text-ink-900 group-hover:text-electricviolet transition-colors">
+            {project.title}
+          </h3>
           <p className="mt-3 font-sans text-[15px] leading-relaxed text-ink-600">{project.short}</p>
 
           <div className="mt-6 flex flex-wrap gap-1.5">
@@ -176,24 +192,21 @@ function ProjectCard({
           </div>
 
           <div className="mt-auto flex items-center justify-between gap-3 pt-6 border-t border-dashed border-ink-300">
-            <button
-              type="button"
-              onClick={() => {
-                onOpen(project);
-                blip(620);
-              }}
-              className="inline-flex items-center gap-1.5 font-pixel text-[10px] text-electricviolet hover:underline focus:outline-none"
-            >
+            <span className="inline-flex items-center gap-1.5 font-pixel text-[10px] text-electricviolet group-hover:underline">
               CASE STUDY <ArrowUpRight size={16} />
-            </button>
+            </span>
 
             {project.github && (
               <a
                 href={project.github}
                 target="_blank"
                 rel="noreferrer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  blip(540);
+                }}
                 aria-label={`View ${project.title} source on GitHub`}
-                className="flex items-center gap-1.5 border-2 border-ink-900 bg-nearblack px-2.5 py-1.5 font-pixel text-[9px] text-warmcream-50 shadow-chunk-sm hover:-translate-y-0.5"
+                className="relative z-10 flex items-center gap-1.5 border-2 border-ink-900 bg-nearblack px-2.5 py-1.5 font-pixel text-[9px] text-warmcream-50 shadow-chunk-sm transition-transform hover:-translate-y-0.5 hover:bg-electricviolet"
               >
                 <Github size={12} /> REPO
               </a>
