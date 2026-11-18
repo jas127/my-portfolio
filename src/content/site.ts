@@ -491,26 +491,32 @@ export const siteContent = {
       color: '#F4A8D0',
     },
   ],
-  education: [
-    {
-      school: 'Neil Gogte Institute of Technology',
-      qualification: 'B.Tech — Computer Science & Engineering',
-      focus: 'Specialisation: Artificial Intelligence & Machine Learning',
-      timeline: 'Expected Graduation: May 2027',
-      performance: 'CGPA: 8.76 / 10',
-      note: 'Deepening foundations in algorithms, machine learning architectures, and software systems.',
-      color: '#FF4C35',
-    },
-    {
-      school: 'Indian Institute of Technology Madras',
-      qualification: 'BS — Data Science and Applications',
-      focus: 'Dual degree pursued alongside B.Tech',
-      timeline: 'Expected Graduation: May 2027',
-      performance: null,
-      note: 'Rigorous coursework in statistical inference, programming pipelines, and enterprise data analytics.',
-      color: '#7049C6',
-    },
-  ],
+  education: {
+    storyHeading: "Two degrees. One thing I've figured out about myself.",
+    storyParagraphs: [
+      "I've never quite figured out what I want to be, or found one particular thing that defines me. But I think I've figured out one thing about how I want to live: I want to keep learning, and I don't want to put limits on how far I'm willing to go to understand something.",
+      "For me, education has always felt like more than earning a degree. There's something deeply personal about making the most of the opportunity to learn. I think of it as my dharma: to stay curious, to learn wholeheartedly and to do justice to the opportunities I've been given.",
+      "That's what led me to pursue two degrees at the same time: a B.Tech in Computer Science and Engineering (AI & ML) at NGIT and a BS in Data Science at IIT Madras. Two different academic journeys, both driven by the same desire to learn as much as I can.",
+    ],
+    degrees: [
+      {
+        school: 'Neil Gogte Institute of Technology',
+        qualification: 'B.Tech — Computer Science and Engineering (AI & ML)',
+        focus: 'Specialisation: Artificial Intelligence & Machine Learning',
+        timeline: 'Expected graduation: May 2027',
+        note: 'Foundations in algorithms, machine learning architectures, and computational systems.',
+        color: '#FF4C35',
+      },
+      {
+        school: 'Indian Institute of Technology Madras',
+        qualification: 'BS — Data Science and Applications',
+        focus: 'Dual degree pursued concurrently alongside B.Tech',
+        timeline: 'Expected graduation: May 2027',
+        note: 'Rigorous mathematical foundations, statistical inference, data structures, and enterprise data engineering.',
+        color: '#7049C6',
+      },
+    ],
+  },
   about: [
     "Hi, I'm Jasmitha.",
     "I'm a Computer Science student pursuing a second degree in Data Science, interested in the space where technology, data and business meet.",
