@@ -1,31 +1,85 @@
 import { Coin } from '@/pixel';
+import { siteContent } from '@/content/site';
+import { ArrowUp, Heart, Github, Linkedin, Mail } from 'lucide-react';
 import { useSound } from '@/lib/sound';
 
 export default function Footer() {
   const { blip } = useSound();
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    blip(750);
+  };
+
   return (
-    <footer className="border-t-[3px] border-ink-700 bg-ink-900 py-10">
-      <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-4 text-center md:px-8">
-        <button
-          onClick={() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            blip(700);
-          }}
-          className="flex items-center gap-3 transition-transform hover:-translate-y-1"
-          aria-label="Back to top"
-        >
-          <Coin scale={3} />
-          <span className="font-pixel text-[10px] tracking-widest text-cream-100">
-            INSERT COIN TO RETURN TO TOP
-          </span>
-          <Coin scale={3} />
-        </button>
-        <p className="font-hand text-xl text-cream-300/80">
-          handcrafted with curiosity — Jasmitha Kancharlapalli
-        </p>
-        <p className="font-pixel text-[8px] tracking-wider text-cream-300/50">
-          CURIOSITY ARCADE — ALL PIXELS ORIGINAL
-        </p>
+    <footer className="border-t-[3px] border-ink-900 bg-nearblack py-16 text-warmcream-50">
+      <div className="mx-auto max-w-6xl px-4 md:px-8">
+        <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
+          <div>
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center border-2 border-warmcream-50 bg-tomato-500 font-display text-xl font-black text-warmcream-50 shadow-chunk-sm">
+                J.
+              </span>
+              <div>
+                <h3 className="font-display text-2xl font-black">{siteContent.owner.fullName}</h3>
+                <p className="font-hand text-xl text-acidlime">&ldquo;Curious by default. Analytical by choice.&rdquo;</p>
+              </div>
+            </div>
+
+            <p className="mt-4 max-w-md font-sans text-sm text-ink-300">
+              Personal portfolio built with retro pixel art, responsive editorial design, and verifiable analytical case studies.
+            </p>
+          </div>
+
+          <div className="flex flex-col items-start gap-4 sm:items-end">
+            <div className="flex items-center gap-3">
+              <a
+                href={siteContent.owner.github}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="GitHub profile"
+                className="flex h-10 w-10 items-center justify-center border-2 border-warmcream-50 bg-ink-800 text-warmcream-50 shadow-chunk-sm transition-transform hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-acidlime"
+              >
+                <Github size={18} />
+              </a>
+              <a
+                href={siteContent.owner.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="LinkedIn profile"
+                className="flex h-10 w-10 items-center justify-center border-2 border-warmcream-50 bg-electricviolet text-warmcream-50 shadow-chunk-sm transition-transform hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-acidlime"
+              >
+                <Linkedin size={18} />
+              </a>
+              <a
+                href={`mailto:${siteContent.owner.email}`}
+                aria-label="Send email"
+                className="flex h-10 w-10 items-center justify-center border-2 border-warmcream-50 bg-tomato-500 text-warmcream-50 shadow-chunk-sm transition-transform hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-acidlime"
+              >
+                <Mail size={18} />
+              </a>
+            </div>
+
+            <button
+              type="button"
+              onClick={scrollToTop}
+              className="inline-flex items-center gap-2 border-2 border-warmcream-50 bg-acidlime px-4 py-2 font-pixel text-[10px] text-ink-900 shadow-chunk-sm transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-acidlime"
+            >
+              <span>BACK TO TOP</span>
+              <ArrowUp size={14} />
+            </button>
+          </div>
+        </div>
+
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-ink-800 pt-8 sm:flex-row">
+          <div className="flex items-center gap-2 font-pixel text-[10px] text-ink-400">
+            <span>GAME OVER? NO, JUST LEVELING UP.</span>
+            <Coin scale={2} />
+          </div>
+
+          <p className="flex items-center gap-1 font-sans text-xs text-ink-400">
+            Crafted with <Heart size={14} className="text-tomato-500 fill-tomato-500" /> for Curiosity Arcade
+          </p>
+        </div>
       </div>
     </footer>
   );
