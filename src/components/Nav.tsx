@@ -117,10 +117,11 @@ export default function Nav() {
               <span className="font-pixel text-[8px] tracking-wider text-ink-900">OPEN TO OPPORTUNITIES</span>
             </a>
 
-            {/* Sound toggle */}
+            {/* Sound & background music toggle */}
             <button
               onClick={toggle}
-              aria-label={on ? 'Turn retro sound effects off' : 'Turn retro sound effects on'}
+              title={on ? 'Mute background song & audio' : 'Unmute background song & audio'}
+              aria-label={on ? 'Mute background song & audio' : 'Unmute background song & audio'}
               className={`flex h-10 w-10 items-center justify-center border-[3px] border-ink-900 shadow-chunk-sm transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-tomato-500 ${
                 on ? 'bg-acidlime' : 'bg-warmcream-50'
               }`}

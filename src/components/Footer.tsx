@@ -1,6 +1,6 @@
 import { Coin } from '@/pixel';
 import { siteContent } from '@/content/site';
-import { ArrowUp, Heart, Github, Linkedin, Mail } from 'lucide-react';
+import { ArrowUp, Github, Linkedin, Mail } from 'lucide-react';
 import { useSound } from '@/lib/sound';
 
 export default function Footer() {
@@ -76,8 +76,8 @@ export default function Footer() {
             <Coin scale={2} />
           </div>
 
-          <p className="flex items-center gap-1 font-sans text-xs text-ink-400">
-            Crafted with <Heart size={14} className="text-tomato-500 fill-tomato-500" /> for Curiosity Arcade
+          <p className="font-sans text-xs text-ink-300">
+            if u are too lazy to shazam the song, it&apos;s &ldquo;subterranean homesick alien - radiohead&rdquo;. ur welcome !
           </p>
         </div>
       </div>

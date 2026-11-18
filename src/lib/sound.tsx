@@ -1,4 +1,5 @@
-import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
+import bgMusicUrl from '@/audio/subterranean_homesick_alien.mp3';
 
 type SoundApi = {
   on: boolean;
@@ -8,35 +9,82 @@ type SoundApi = {
 };
 
 const SoundContext = createContext<SoundApi>({
-  on: false,
+  on: true,
   toggle: () => {},
   blip: () => {},
   fanfare: () => {},
 });
 
 export function SoundProvider({ children }: { children: ReactNode }) {
-  const [on, setOn] = useState(false);
+  const [on, setOn] = useState(true);
+  const onRef = useRef(true);
   const ctxRef = useRef<AudioContext | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const ctx = () => {
+  const ctx = useCallback(() => {
     if (!ctxRef.current) {
       ctxRef.current = new AudioContext();
     }
     return ctxRef.current;
-  };
+  }, []);
 
-  const tone = (freq: number, start: number, dur: number, vol = 0.06) => {
-    const ac = ctx();
-    const osc = ac.createOscillator();
-    const gain = ac.createGain();
-    osc.type = 'square';
-    osc.frequency.value = freq;
-    gain.gain.setValueAtTime(vol, ac.currentTime + start);
-    gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + start + dur);
-    osc.connect(gain).connect(ac.destination);
-    osc.start(ac.currentTime + start);
-    osc.stop(ac.currentTime + start + dur);
-  };
+  const getAudio = useCallback(() => {
+    if (!audioRef.current) {
+      const el = new Audio(bgMusicUrl);
+      el.loop = true;
+      el.volume = 0.35;
+      el.preload = 'auto';
+      audioRef.current = el;
+    }
+    return audioRef.current;
+  }, []);
+
+  // Attempt to play on mount; if browser blocks autoplay until interaction, start on first click/key/touch while `on` is true
+  useEffect(() => {
+    const el = getAudio();
+
+    const tryPlay = () => {
+      if (!onRef.current) return;
+      el.muted = false;
+      void el.play().catch(() => {
+        /* browser waiting for user gesture */
+      });
+    };
+
+    tryPlay();
+
+    const unlockOnGesture = () => {
+      if (onRef.current && el.paused) {
+        el.muted = false;
+        void el.play().catch(() => {});
+      }
+    };
+
+    window.addEventListener('pointerdown', unlockOnGesture, { passive: true });
+    window.addEventListener('keydown', unlockOnGesture, { passive: true });
+
+    return () => {
+      window.removeEventListener('pointerdown', unlockOnGesture);
+      window.removeEventListener('keydown', unlockOnGesture);
+      el.pause();
+    };
+  }, [getAudio]);
+
+  const tone = useCallback(
+    (freq: number, start: number, dur: number, vol = 0.06) => {
+      const ac = ctx();
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = 'square';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(vol, ac.currentTime + start);
+      gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + start + dur);
+      osc.connect(gain).connect(ac.destination);
+      osc.start(ac.currentTime + start);
+      osc.stop(ac.currentTime + start + dur);
+    },
+    [ctx],
+  );
 
   const blip = useCallback(
     (freq = 440) => {
@@ -47,7 +95,7 @@ export function SoundProvider({ children }: { children: ReactNode }) {
         /* audio unavailable */
       }
     },
-    [on],
+    [on, tone],
   );
 
   const fanfare = useCallback(() => {
@@ -59,31 +107,30 @@ export function SoundProvider({ children }: { children: ReactNode }) {
     } catch {
       /* audio unavailable */
     }
-  }, [on]);
+  }, [on, tone]);
 
   const toggle = useCallback(() => {
     setOn((prev) => {
       const next = !prev;
+      onRef.current = next;
+      const el = getAudio();
       if (next) {
+        el.muted = false;
+        void el.play().catch(() => {});
         try {
           const ac = ctx();
           if (ac.state === 'suspended') void ac.resume();
-          const osc = ac.createOscillator();
-          const gain = ac.createGain();
-          osc.type = 'square';
-          osc.frequency.value = 660;
-          gain.gain.setValueAtTime(0.05, ac.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.09);
-          osc.connect(gain).connect(ac.destination);
-          osc.start();
-          osc.stop(ac.currentTime + 0.09);
+          tone(660, 0, 0.08, 0.04);
         } catch {
           /* audio unavailable */
         }
+      } else {
+        el.muted = true;
+        el.pause();
       }
       return next;
     });
-  }, []);
+  }, [ctx, getAudio, tone]);
 
   return (
     <SoundContext.Provider value={{ on, toggle, blip, fanfare }}>

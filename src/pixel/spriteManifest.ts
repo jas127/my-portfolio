@@ -42,4 +42,4 @@ export type Expression = (typeof EXPRESSIONS)[number];
 export const FACE_STRIP: StripInfo = { frames: 11, w: 124, h: 138, fps: 0, rest: 0 };
 
 export const STRIP_URL = (name: SpriteAnimation | 'faces') =>
-  name === 'wave' ? '/assets/sprites/strips/wave-loop.png?v=6' : `/assets/sprites/strips/${name}.png?v=6`;
+  name === 'wave' ? '/assets/sprites/strips/wave-loop.png?v=7' : `/assets/sprites/strips/${name}.png?v=7`;
