@@ -6,6 +6,7 @@ import { SectionHeading, Sticker, Reveal, PixelObject } from '@/components/ui';
 import { PixelSprite } from '@/pixel';
 import { BULB, DIAMOND, FLAG as FLAG_SPRITE, STAR } from '@/pixel/sprites';
 import { CharacterSheet } from '@/components/CharacterSheet';
+import { IntelisFlagship } from '@/components/IntelisFlagship';
 import { useSound } from '@/lib/sound';
 
 function ProjectMarker({ kind }: { kind: string }) {
@@ -225,8 +226,17 @@ export function MainQuests() {
     <section id="main-quests" className="relative mx-auto max-w-6xl px-4 py-20 md:px-8 md:py-28">
       <SectionHeading index="01" title="Main Quests" note="the big analytical builds" color="#FF4C35" />
       <p className="-mt-6 mb-10 max-w-2xl font-sans text-base leading-relaxed text-ink-500 md:text-lg">
-        Four featured projects exploring predictive modeling, strategy simulation, payment recovery intelligence and computer vision explainability. Each project includes transparent methodological reporting.
+        Featured analytical builds led by my flagship geospatial market intelligence platform, alongside four projects exploring predictive modeling, strategy simulation, payment recovery intelligence and computer vision explainability.
       </p>
+
+      <IntelisFlagship />
+
+      <div className="mb-6 flex items-center gap-3">
+        <span className="border-2 border-ink-900 bg-acidlime px-2.5 py-1 font-pixel text-[9px] text-ink-900 shadow-chunk-sm">
+          MORE MAIN QUESTS // 01 – 04
+        </span>
+        <span className="h-[2px] flex-1 bg-ink-900/20" />
+      </div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {siteContent.projects.map((project, index) => (
